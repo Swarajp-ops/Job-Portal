@@ -1,0 +1,6 @@
+{
+  "name": "CareerBridge",
+  "description": "A high-performance, premium job and internship board supporting the entire hiring ecosystem for candidates, automated recruiters, and platform administrators.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

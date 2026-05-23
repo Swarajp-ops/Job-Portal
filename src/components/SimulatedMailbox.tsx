@@ -70,9 +70,9 @@ export const SimulatedMailbox: React.FC<SimulatedMailboxProps> = ({ isOpen, onCl
               <div className="py-12 px-4 text-center text-slate-550 space-y-2">
                 <Inbox className="mx-auto text-slate-700" size={28} />
                 <p className="font-sans text-[11px]">Mail sandbox queue is empty.</p>
-                <p className="font-sans text-[9px] text-slate-500 leading-normal max-w-[180px] mx-auto">
-                  New registration triggers or "Resend" requests will route verified communications payload models here.
-                </p>
+              <p className="font-sans text-[9px] text-slate-500 leading-normal max-w-45 mx-auto">
+  New registration triggers or "Resend" requests will route verified communications payload models here.
+</p>
               </div>
             ) : (
               simulatedEmails.map((eml) => {
@@ -151,10 +151,10 @@ export const SimulatedMailbox: React.FC<SimulatedMailboxProps> = ({ isOpen, onCl
                 <div className="bg-white text-slate-800 p-8 rounded-xl shadow-lg max-w-xl mx-auto space-y-6 border border-neutral-200">
                   {/* Brand header */}
                   <div className="flex items-center gap-2 pb-4 border-b border-slate-100">
-                    <div className="w-7 h-7 rounded bg-[#0d9488] flex items-center justify-center font-bold text-white text-xs tracking-wide">
+                    <div className="w-7 h-7 rounded bg-teal-600 flex items-center justify-center font-bold text-white text-xs tracking-wide">
                       CB
                     </div>
-                    <span className="font-display text-sm font-extrabold text-[#0f172a] tracking-tight">
+                  <span className="font-display text-sm font-extrabold text-slate-900 tracking-tight">
                       CareerBridge Switzerland
                     </span>
                   </div>
@@ -170,7 +170,7 @@ export const SimulatedMailbox: React.FC<SimulatedMailboxProps> = ({ isOpen, onCl
                     <div className="py-2.5 text-center">
                       <a
                         href={`${window.location.origin}${window.location.pathname}?verify_token=${activeEmail.token}`}
-                        className="inline-flex items-center gap-2 bg-[#0d9488] hover:bg-[#0f766e] text-white text-xs font-display font-bold py-2.5 px-6 rounded-lg shadow-md hover:scale-[1.01] transition-all"
+                       className="inline-flex items-center gap-2 bg-teal-600 hover:bg-teal-700 text-white text-xs font-display font-bold py-2.5 px-6 rounded-lg shadow-md hover:scale-[1.01] transition-all"
                         onClick={(e) => {
                           // Let's close the mail client tray and trigger verification logic directly so they do not absolutely need a full reload in the preview pane
                           onClose();
@@ -190,14 +190,16 @@ export const SimulatedMailbox: React.FC<SimulatedMailboxProps> = ({ isOpen, onCl
 
                   {/* Manual token entry backup helper */}
                   <div className="bg-teal-50/50 p-3.5 rounded-lg border border-teal-100 space-y-1.5">
-                    <p className="text-[10px] font-bold text-[#0d9488] uppercase tracking-wider">Manual Verification Code</p>
+                  <p className="text-[10px] font-bold text-teal-600 uppercase tracking-wider">
+  Manual Verification Code
+</p>
                     <div className="flex items-center justify-between">
                       <code className="text-slate-800 font-bold font-mono tracking-wider text-xs">
                         {activeEmail.token}
                       </code>
                       <button
                         onClick={() => copyToClipboard(activeEmail.token)}
-                        className="text-[10px] font-bold text-[#0f766e] hover:underline"
+                       className="text-[10px] font-bold text-teal-700 hover:underline"
                       >
                         {copiedToken === activeEmail.token ? "Copied!" : "Copy Code"}
                       </button>

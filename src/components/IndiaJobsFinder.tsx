@@ -533,7 +533,7 @@ export const IndiaJobsFinder: React.FC = () => {
                     >
                       <div className="p-5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                         <div className="flex gap-4 items-start">
-                          <div className="w-12 h-12 rounded-xl bg-slate-50 border border-neutral-slate-200 flex items-center justify-center overflow-hidden flex-shrink-0 font-display font-medium text-primary shadow-xs">
+                         <div className="w-12 h-12 rounded-xl bg-slate-50 border border-neutral-slate-200 flex items-center justify-center overflow-hidden shrink-0 font-display font-medium text-primary shadow-xs">
                             {job.companyLogo ? (
                               <img src={job.companyLogo} alt={job.companyName} className="w-full h-full object-cover" />
                             ) : (
@@ -759,8 +759,8 @@ export const IndiaJobsFinder: React.FC = () => {
                     <button
                       type="submit"
                       disabled={isSubmittingApp}
-                      className="w-full bg-[#0d9488] hover:bg-[#0f766e] disabled:bg-[#0d9488]/40 text-white font-display text-xs font-bold py-2.5 rounded-xl transition-all flex items-center justify-center gap-2 cursor-pointer shadow-sm"
-                    >
+                     
+                    >className="w-full bg-teal-600 hover:bg-teal-700 disabled:bg-teal-600/40 text-white font-display text-xs font-bold py-2.5 rounded-xl transition-all flex items-center justify-center gap-2 cursor-pointer shadow-sm"
                       {isSubmittingApp ? (
                         <>
                           <Loader2 className="animate-spin shrink-0" size={14} />

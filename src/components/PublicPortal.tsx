@@ -277,7 +277,7 @@ export const PublicPortal: React.FC<PublicPortalProps> = ({
                     </div>
 
                     {/* Left image layout with glass indicators */}
-                    <div className="relative hidden lg:block h-[500px]">
+                  <div className="relative hidden lg:block h-125">
                       <div className="absolute inset-0 bg-teal-50 rounded-[36px] rotate-2 -z-10 translate-x-6 translate-y-4"></div>
                       <img 
                         className="w-full h-full object-cover rounded-[36px] shadow-xl relative z-10 transition-all duration-700 hover:scale-[1.01]" 
@@ -424,7 +424,7 @@ export const PublicPortal: React.FC<PublicPortalProps> = ({
                   <div className="max-w-container-max mx-auto grid lg:grid-cols-2 gap-16 items-center">
                     <div className="relative">
                       <img 
-                        className="rounded-2xl shadow-2xl w-full h-[360px] object-cover filter grayscale-[15%] hover:grayscale-0 transition-all duration-300" 
+                        className="rounded-2xl shadow-2xl w-full h-90 object-cover filter grayscale-15 hover:grayscale-0 transition-all duration-300" 
                         src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFBP7ndKBoHLDTOs6b_5WxiM36XsFcErP0G3U-S5WmWomc_jJJBO4dUbmGMB7isoVdRgUBUJc51xLh1eUpKKbWZQLi89V75HyyMEbFv7aAsA64SgwI14rIka77CNJ71VJndwjaEuD0qfG8ZihJeacpME1pkCYUzW_-f0LhB-hl81FSgbKsgXHAZvzAyic98ga4eJKT3fYiOm2tMKI10La4ZAgbJ2_A6hp9Hh7i9R2ylfnPppVPTo4pamIdzTZab8XhwdouEtIrXdw" 
                         alt="Collaborative Training"
                       />
@@ -687,7 +687,7 @@ export const PublicPortal: React.FC<PublicPortalProps> = ({
                             className="bg-white border border-neutral-slate-200/70 p-5 rounded-xl hover:shadow-md transition-all cursor-pointer flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 hover:border-primary/30"
                           >
                             <div className="flex items-center gap-4">
-                              <div className="w-10 h-10 bg-teal-50 border border-teal-100 rounded-lg flex items-center justify-center font-bold text-primary text-sm font-display overflow-hidden flex-shrink-0">
+                              <div className="w-10 h-10 bg-teal-50 border border-teal-100 rounded-lg flex items-center justify-center font-bold text-primary text-sm font-display overflow-hidden shrink-0">
                                 {j.companyLogo ? (
                                   <img src={j.companyLogo} alt={j.companyName} className="w-full h-full object-cover" />
                                 ) : (
@@ -760,7 +760,7 @@ export const PublicPortal: React.FC<PublicPortalProps> = ({
                         </p>
                         
                         <div className="space-y-3 mt-4">
-                          <p className="text-xs font-bold text-secondary uppercase tracking-[0.05em] border-b border-neutral-slate-100 pb-1">Recommended steps:</p>
+                          <p className="text-xs font-bold text-secondary uppercase tracking-wider border-b border-neutral-slate-100 pb-1">Recommended steps:</p>
                           {res.steps.map((st, sIdx) => (
                             <div key={sIdx} className="flex gap-2 items-start">
                               <span className="w-4 h-4 bg-teal-50 text-primary rounded-full font-display text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5">
@@ -1007,7 +1007,7 @@ const JobDetailsPage: React.FC<JobDetailsPageProps> = ({ jobId, onBack, onApply 
                   {job.title}
                 </h1>
                 <p className="font-sans text-xs sm:text-sm text-neutral-slate-500 mt-0.5">
-                  {job.companyName} • {job.location} • <span className="font-display font-bold uppercase tracking-[0.05em] text-[10px] bg-neutral-slate-100 px-1.5 py-0.5 rounded text-neutral-600">{job.type.replace("-", " ")}</span>
+                  {job.companyName} • {job.location} • <span className="font-display font-bold uppercase tracking-wider text-[10px] bg-neutral-slate-100 px-1.5 py-0.5 rounded text-neutral-600">{job.type.replace("-", " ")}</span>
                 </p>
               </div>
             </div>
@@ -1074,8 +1074,10 @@ const JobDetailsPage: React.FC<JobDetailsPageProps> = ({ jobId, onBack, onApply 
 
             {job.perks && job.perks.length > 0 && (
               <div>
-                <h3 className="font-display font-bold text-secondary text-sm sm:text-base mb-2 font-semibold">Compensation & Perks</h3>
-                <ul className="list-disc pl-5 space-y-1.5">
+               <h3 className="font-display font-semibold text-secondary text-sm sm:text-base mb-2">
+  Compensation & Perks
+</h3>
+<ul className="list-disc pl-5 space-y-1.5">
                   {job.perks.map((p, idx) => (
                     <li key={idx} className="font-sans text-xs sm:text-sm text-neutral-slate-600 leading-relaxed">
                       {p}

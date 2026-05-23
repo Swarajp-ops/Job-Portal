@@ -458,7 +458,7 @@ export const AdminWorkspace: React.FC = () => {
 
                         <div>
                           <p className="font-display text-xs font-bold text-indigo-650">{cand.headline}</p>
-                          <span className="font-sans text-[11px] text-neutral-slate-500 mt-0.5 block flex items-center gap-1">
+                         <span className="font-sans text-[11px] text-neutral-slate-500 mt-0.5 flex items-center gap-1">
                             <MapPin size={11} /> {cand.location} • <Mail size={11} /> {cand.email}
                           </span>
                         </div>

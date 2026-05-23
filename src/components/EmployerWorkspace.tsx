@@ -195,6 +195,8 @@ export const EmployerWorkspace: React.FC = () => {
   const [jobElig, setJobElig] = useState("");
   const [jobOpenings, setJobOpenings] = useState(1);
   const [jobStatus, setJobStatus] = useState<JobStatus>("published");
+  const [jobSkills, setJobSkills] = useState("");
+const [jobDeadline, setJobDeadline] = useState("");
 
   // Employer Branding Profile states
   const [brandName, setBrandName] = useState(employerProfile?.companyName || "");
@@ -251,83 +253,95 @@ export const EmployerWorkspace: React.FC = () => {
   const countInterviewing = companyApplicants.filter(app => app.status.includes("interview")).length;
   const countHired = companyApplicants.filter(app => app.status === "hired").length;
 
-  const handlePostJobSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    const preparedJobData = {
-      title: jobTitle,
-      department: jobDept,
-      location: jobLoc,
-      workMode: jobMode,
-      type: jobType,
-      salaryRange: jobSalary || "No Specified compensation",
-      description: jobDesc,
-      requirements: jobReqs.split("\n").map(s => s.trim()).filter(Boolean),
-      responsibilities: jobResps.split("\n").map(s => s.trim()).filter(Boolean),
-      perks: jobPerks.split("\n").map(s => s.trim()).filter(Boolean),
-      eligibility: jobElig,
-      openings: Number(jobOpenings),
-      status: jobStatus,
-      isFeatured: false
-    };
 
-    if (isNewJob) {
-      if (currentUser && !currentUser.emailVerified) {
-        alert("Verification Required: Please verify your corporate email address first to publish new slots! Inspect the floating 'Mail Sandbox' panel in the bottom-left corner to confirm your address.");
-        return;
-      }
-      createJob(preparedJobData);
-    } else {
-      updateJob(editJobId, preparedJobData);
-    }
 
-    // Reset Form & Redirect
-    resetJobForm();
-    setActiveStep("manage-jobs");
+const resetJobForm = () => {
+  setIsNewJob(true);
+  setEditJobId("");
+  setJobTitle("");
+  setJobDept("Engineering");
+  setJobLoc("");
+  setJobMode("hybrid");
+  setJobType("full-time");
+  setJobSalary("");
+  setJobDesc("");
+  setJobReqs("");
+  setJobResps("");
+  setJobPerks("");
+  setJobElig("");
+  setJobSkills("");
+  setJobDeadline("");
+  setJobOpenings(1);
+  setJobStatus("published");
+};
+
+const handlePostJobSubmit = (e: React.FormEvent) => {
+  e.preventDefault();
+
+  const preparedJobData = {
+    title: jobTitle,
+    department: jobDept,
+    location: jobLoc,
+    workMode: jobMode,
+    type: jobType,
+    salaryRange: jobSalary || "No Specified compensation",
+    description: jobDesc,
+    requirements: jobReqs.split("\n").map((s) => s.trim()).filter(Boolean),
+    responsibilities: jobResps.split("\n").map((s) => s.trim()).filter(Boolean),
+    perks: jobPerks.split("\n").map((s) => s.trim()).filter(Boolean),
+    eligibility: jobElig,
+    skills: jobSkills.split(",").map((s) => s.trim()).filter(Boolean),
+    deadline: jobDeadline,
+    openings: Number(jobOpenings),
+    status: jobStatus,
+    isFeatured: false,
   };
 
-  const resetJobForm = () => {
-    setIsNewJob(true);
-    setEditJobId("");
-    setJobTitle("");
-    setJobDept("Engineering");
-    setJobLoc("");
-    setJobMode("hybrid");
-    setJobType("full-time");
-    setJobSalary("");
-    setJobDesc("");
-    setJobReqs("");
-    setJobResps("");
-    setJobPerks("");
-    setJobElig("");
-    setJobOpenings(1);
-    setJobStatus("published");
-  };
-
-  const handleDuplicateJob = (job: JobPost) => {
+  if (isNewJob) {
     if (currentUser && !currentUser.emailVerified) {
-      alert("Verification Required: Please verify your corporate email address first sequence! Inspect the floating 'Mail Sandbox' panel in the bottom-left corner.");
+      alert(
+        "Verification Required: Please verify your corporate email address first to publish new slots! Inspect the floating 'Mail Sandbox' panel in the bottom-left corner to confirm your address."
+      );
       return;
     }
-    // Post new duplicate job with slightly updated label
-    const preDupe = {
-      title: `${job.title} (Duplicate)`,
-      department: job.department,
-      location: job.location,
-      workMode: job.workMode,
-      type: job.type,
-      salaryRange: job.salaryRange,
-      description: job.description,
-      requirements: job.requirements,
-      responsibilities: job.responsibilities,
-      perks: job.perks,
-      eligibility: job.eligibility,
-      openings: job.openings,
-      status: "draft" as JobStatus, // duplicate as draft
-      isFeatured: false
-    };
-    createJob(preDupe);
+    createJob(preparedJobData);
+  } else {
+    updateJob(editJobId, preparedJobData);
+  }
+
+  resetJobForm();
+  setActiveStep("manage-jobs");
+};
+
+const handleDuplicateJob = (job: JobPost) => {
+  if (currentUser && !currentUser.emailVerified) {
+    alert(
+      "Verification Required: Please verify your corporate email address first sequence! Inspect the floating 'Mail Sandbox' panel in the bottom-left corner."
+    );
+    return;
+  }
+
+  const preDupe = {
+    title: `${job.title} (Duplicate)`,
+    department: job.department,
+    location: job.location,
+    workMode: job.workMode,
+    type: job.type,
+    salaryRange: job.salaryRange,
+    description: job.description,
+    requirements: job.requirements,
+    responsibilities: job.responsibilities,
+    perks: job.perks,
+    eligibility: job.eligibility,
+    skills: job.skills,
+    deadline: job.deadline,
+    openings: job.openings,
+    status: "draft" as JobStatus,
+    isFeatured: false,
   };
+
+  createJob(preDupe);
+};
 
   const syncCorporateBranding = (e: React.FormEvent) => {
     e.preventDefault();
@@ -869,7 +883,7 @@ export const EmployerWorkspace: React.FC = () => {
                                   <p className="text-[10px] text-neutral-slate-450 truncate">{app.candidateEmail}</p>
                                 </div>
                               </td>
-                              <td className="p-4 font-semibold text-secondary min-w-[120px]">
+                              <td className="p-4 font-semibold text-secondary  min-w-30">
                                 {matchedJ?.title || "N/A"}
                               </td>
                               <td className="p-4">
@@ -973,7 +987,7 @@ export const EmployerWorkspace: React.FC = () => {
                       </select>
                     </div>
 
-                    <div className="space-y-2.5 max-h-[500px] overflow-y-auto pr-1">
+                    <div className="space-y-2.5  max-h-125 overflow-y-auto pr-1">
                       {filteredApplicants.length === 0 ? (
                         <p className="font-sans text-xs text-neutral-slate-450 py-6 text-center">No applicants found matching this filter.</p>
                       ) : (
@@ -1008,9 +1022,9 @@ export const EmployerWorkspace: React.FC = () => {
                                       {matchScore}% Match
                                     </span>
                                     {rating && (
-                                      <span className="font-display text-[9px] font-bold text-amber-655 bg-amber-50 px-1.5 py-0.5 rounded leading-none flex items-center gap-0.5 font-semibold">
-                                        ★ {rating}
-                                      </span>
+                                     <span className="font-display text-[9px] font-bold text-amber-655 bg-amber-50 px-1.5 py-0.5 rounded leading-none flex items-center gap-0.5">
+  ★ {rating}
+</span>
                                     )}
                                   </div>
                                 </div>
@@ -1155,7 +1169,7 @@ export const EmployerWorkspace: React.FC = () => {
                           <div className="space-y-6">
                             {/* Short bio headline */}
                             {matchedCandidate && (
-                              <div className="bg-gradient-to-r from-neutral-slate-50 to-indigo-50/15 p-4 rounded-xl border border-neutral-slate-205">
+                              <div className="bg-linear-to-r from-neutral-slate-50 to-indigo-50/15 p-4 rounded-xl border border-neutral-slate-205">
                                 <p className="font-display text-[10px] font-bold text-primary uppercase tracking-wider">Dossier Headline Summary</p>
                                 <p className="font-display text-sm font-semibold text-secondary mt-1">"{matchedCandidate.headline}"</p>
                                 <p className="font-sans text-xs text-neutral-slate-600 mt-2 leading-relaxed">{matchedCandidate.about}</p>
@@ -1201,7 +1215,7 @@ export const EmployerWorkspace: React.FC = () => {
                                     <div className="space-y-3 pl-2.5 border-l border-neutral-slate-205">
                                       {matchedCandidate.experience.map(exp => (
                                         <div key={exp.id} className="relative pl-4 space-y-0.5 animate-fade-in">
-                                          <div className="absolute left-[-14px] top-1.5 w-2 h-2 rounded-full bg-secondary border border-white" />
+                                          <div className="absolute  -left-3.5 top-1.5 w-2 h-2 rounded-full bg-secondary border border-white" />
                                           <p className="font-display text-xs font-bold text-secondary leading-normal">{exp.title}</p>
                                           <p className="font-sans text-[10px] text-primary">{exp.company} • {exp.location}</p>
                                           <p className="font-sans text-[9px] text-neutral-slate-400 mt-0.5">{exp.startDate} - {exp.endDate}</p>
@@ -1337,7 +1351,7 @@ export const EmployerWorkspace: React.FC = () => {
 
                             {/* Resume parser detail link */}
                             <div className="border border-indigo-200 bg-indigo-50/10 p-5 rounded-xl text-left space-y-2">
-                              <h5 className="font-display font-bold text-xs text-secondary flex items-center gap-1.5 font-semibold">
+                              <h5 className="font-display font-semibold text-xs text-secondary flex items-center gap-1.5">
                                 <FileText size={14} className="text-indigo-650" /> Fully Indexed Attachment
                               </h5>
                               <p className="font-sans text-xs text-neutral-slate-600 leading-relaxed">
@@ -1393,12 +1407,17 @@ export const EmployerWorkspace: React.FC = () => {
                           <div className="space-y-6 text-left">
                             <div className="flex justify-between items-center border-b pb-2">
                               <div>
-                                <h4 className="font-display text-xs font-bold text-secondary uppercase tracking-wider text-primary">Interactive Scorecard Engine</h4>
+                               <h4 className="font-display text-xs font-bold text-primary uppercase tracking-wider">
+  Interactive Scorecard Engine
+</h4>
                                 <p className="font-sans text-[11px] text-neutral-slate-400 mt-0.5 font-semibold">Submit dynamic evaluations to rank candidates on the matrix leaderboard</p>
                               </div>
                               <div className="bg-teal-50 border border-teal-150 px-3 py-1.5 rounded-xl text-center shadow-sm">
-                                <span className="font-sans text-[9px] text-neutral-slate-400 uppercase font-black block font-sans tracking-wide">Calculated Grade</span>
-                                <span className="font-display font-extrabold text-secondary text-base text-primary">
+                              <span className="font-sans text-[9px] text-neutral-slate-400 uppercase font-black block tracking-wide">
+  Calculated Grade
+</span>
+
+<span className="font-display font-extrabold text-base text-primary">
                                   {((techVal + softVal + expVal + cultureVal) / 20 / 4).toFixed(2)} / 5.0 ★
                                 </span>
                               </div>
@@ -1425,7 +1444,9 @@ export const EmployerWorkspace: React.FC = () => {
                                     onChange={(e) => setTechVal(Number(e.target.value))} 
                                     className="w-full accent-primary cursor-pointer h-1.5 bg-neutral-slate-200 rounded-lg"
                                   />
-                                  <p className="font-sans text-[9px] text-neutral-slate-400 mt-0.5 text-[9px]">Overlap of matching coding concepts and tools</p>
+                                  <p className="font-sans text-[9px] text-neutral-slate-400 mt-0.5">
+  Overlap of matching coding concepts and tools
+</p>
                                 </div>
 
                                 <div>
@@ -1441,7 +1462,9 @@ export const EmployerWorkspace: React.FC = () => {
                                     onChange={(e) => setSoftVal(Number(e.target.value))} 
                                     className="w-full accent-primary cursor-pointer h-1.5 bg-neutral-slate-200 rounded-lg"
                                   />
-                                  <p className="font-sans text-[9px] text-neutral-slate-400 mt-0.5 text-[9px]">Vocabulary precision and structural responses</p>
+                                 <p className="font-sans text-[9px] text-neutral-slate-400 mt-0.5">
+  Vocabulary precision and structural responses
+</p>
                                 </div>
                               </div>
 
@@ -1459,7 +1482,9 @@ export const EmployerWorkspace: React.FC = () => {
                                     onChange={(e) => setExpVal(Number(e.target.value))} 
                                     className="w-full accent-primary cursor-pointer h-1.5 bg-neutral-slate-200 rounded-lg"
                                   />
-                                  <p className="font-sans text-[9px] text-neutral-slate-400 mt-0.5 text-[9px]">Historical complexity of project portfolios</p>
+                               <p className="font-sans text-[9px] text-neutral-slate-400 mt-0.5">
+  Historical complexity of project portfolios
+</p>
                                 </div>
 
                                 <div>
@@ -1475,7 +1500,9 @@ export const EmployerWorkspace: React.FC = () => {
                                     onChange={(e) => setCultureVal(Number(e.target.value))} 
                                     className="w-full accent-primary cursor-pointer h-1.5 bg-neutral-slate-200 rounded-lg"
                                   />
-                                  <p className="font-sans text-[9px] text-neutral-slate-400 mt-0.5 text-[9px]">Humility, alignment with startup velocity</p>
+                                <p className="font-sans text-[9px] text-neutral-slate-400 mt-0.5">
+  Humility, alignment with startup velocity
+</p>
                                 </div>
                               </div>
                             </div>
@@ -1509,7 +1536,7 @@ export const EmployerWorkspace: React.FC = () => {
 
           {/* ACTIVE CANDIDATE RECRUITER MESSAGINGS */}
           {activeStep === "chats" && (
-            <div className="bg-white border border-neutral-slate-200 rounded-xl shadow-sm overflow-hidden grid lg:grid-cols-12 min-h-[500px]">
+            <div className="bg-white border border-neutral-slate-200 rounded-xl shadow-sm overflow-hidden grid lg:grid-cols-12 min-h-125">
               {/* Left threads */}
               <div className="lg:col-span-4 border-r border-neutral-slate-100 p-4 space-y-4">
                 <h3 className="font-display text-xs sm:text-sm font-bold text-secondary uppercase tracking-wider border-b pb-2">
@@ -1555,7 +1582,7 @@ export const EmployerWorkspace: React.FC = () => {
                             </div>
                           </div>
 
-                          <div className="p-6 flex-1 space-y-4 max-h-[350px] overflow-y-auto scrollbar-thin text-left">
+                          <div className="p-6 flex-1 space-y-4 max-h-87.5 overflow-y-auto scrollbar-thin text-left">
                             {activeMessages.length === 0 ? (
                               <div className="text-center py-12 text-neutral-slate-400">
                                 <MessageSquare className="mx-auto" size={32} />
@@ -1776,4 +1803,4 @@ export const EmployerWorkspace: React.FC = () => {
       )}
     </div>
   );
-};
+  };

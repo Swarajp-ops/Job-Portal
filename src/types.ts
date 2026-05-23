@@ -74,6 +74,7 @@ export interface CompanyProfile {
   id: string;
   userId: string;
   companyName: string;
+   email: string;
   logo: string;
   website: string;
   industry: string;

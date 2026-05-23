@@ -467,7 +467,9 @@ export const CandidateWorkspace: React.FC = () => {
                     { label: "Submitted applications", val: candidateApplieds.length },
                     { label: "Saved jobs list", val: bookmarkListings.length },
                     { label: "Active interviews", val: interviews.filter(i => i.candidateId === candidateProfile.id).length },
-                    { label: "Unread chats", val: messages.filter(m => m.senderRole === "employer" && m.receiverId === candidateProfile.id).length }
+                    { label: "Unread chats", val: messages.filter(
+  m => m.senderRole === "employer" && m.chatId.includes(candidateProfile.id)
+).length }
                   ].map((stat, sIdx) => (
                     <div key={sIdx} className="bg-white border border-neutral-slate-200 p-5 rounded-xl shadow-sm text-center">
                       <p className="font-display text-2xl font-extrabold text-secondary">{stat.val}</p>
@@ -1350,7 +1352,7 @@ export const CandidateWorkspace: React.FC = () => {
                               return (
                                 <div key={idx} className="flex gap-4 relative">
                                   {idx < stages.length - 1 && (
-                                    <div className={`absolute left-2.5 top-6 bottom-[-24px] w-0.5 ${
+                                    <div className={`absolute left-2.5 top-6 -bottom-6 w-0.5 ${
                                       isCompleted ? "bg-primary" : "bg-neutral-slate-100"
                                     }`} />
                                   )}
@@ -1381,7 +1383,7 @@ export const CandidateWorkspace: React.FC = () => {
                             <div className="space-y-3.5">
                               {activeApp.activityLog.map((log) => (
                                 <div key={log.id} className="text-xs space-y-0.5 border-l border-neutral-slate-200 pl-3.5 relative">
-                                  <div className="w-1.5 h-1.5 bg-neutral-slate-300 rounded-full absolute left-[-4px] top-1.5" />
+                                  <div className="w-1.5 h-1.5 bg-neutral-slate-300 rounded-full absolute-left-1 top-1.5" />
                                   <div className="flex justify-between text-[10px] text-neutral-slate-400 font-sans">
                                     <span>{log.changedBy}</span>
                                     <span>{new Date(log.timestamp).toLocaleDateString()}</span>
@@ -1461,7 +1463,7 @@ export const CandidateWorkspace: React.FC = () => {
 
           {/* ACTIVE RECRUITER CHAT MESSAGES */}
           {activeStep === "messages" && (
-            <div className="bg-white border border-neutral-slate-200 rounded-xl shadow-sm overflow-hidden grid lg:grid-cols-12 min-h-[500px]">
+            <div className="bg-white border border-neutral-slate-200 rounded-xl shadow-sm overflow-hidden grid lg:grid-cols-12min-h-125">
               {/* Left threads list */}
               <div className="lg:col-span-4 border-r border-neutral-slate-100 p-4 space-y-4">
                 <h3 className="font-display text-xs sm:text-sm font-bold text-secondary uppercase tracking-wider border-b border-slate-100 pb-2">
@@ -1510,7 +1512,7 @@ export const CandidateWorkspace: React.FC = () => {
                           </div>
 
                           {/* Message bubble scroll box */}
-                          <div className="p-6 flex-1 space-y-4 max-h-[350px] overflow-y-auto scrollbar-thin text-left bg-neutral-slate-50/50">
+                       <div className="p-6 flex-1 space-y-4 max-h-87.5 overflow-y-auto scrollbar-thin text-left bg-neutral-slate-50/50">
                             {activeMessages.length === 0 ? (
                               <div className="text-center py-12 text-neutral-slate-400">
                                 <MessageSquare className="mx-auto text-neutral-slate-300" size={32} />

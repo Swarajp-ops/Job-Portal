@@ -335,19 +335,20 @@ export const JobPortalProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     } else if (role === "employer") {
       const newCompId = `comp-${idSeed}`;
       const newComp: CompanyProfile = {
-        id: newCompId,
-        userId: newUserId,
-        companyName: fullName, // Treated as Company Name contextually
-        logo: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=100&h=100&fit=crop&q=80",
-        website: `https://${fullName.toLowerCase().replace(/\s/g, "")}.com`,
-        industry: "Technology",
-        location: "Remote / Global",
-        companySize: "10 - 50 employees",
-        about: `Onboarded company. Complete company culture descriptions to attract premium designers and coders.`,
-        isVerified: false, // Needs verification
-        emailVerified: false,
-        verificationToken: token
-      };
+  id: newCompId,
+  userId: newUserId,
+  email: email.toLowerCase(),
+  companyName: fullName,
+  logo: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=100&h=100&fit=crop&q=80",
+  website: `https://${fullName.toLowerCase().replace(/\s/g, "")}.com`,
+  industry: "Technology",
+  location: "Remote / Global",
+  companySize: "10 - 50 employees",
+  about: `Onboarded company. Complete company culture descriptions to attract premium designers and coders.`,
+  isVerified: false,
+  emailVerified: false,
+  verificationToken: token
+};
 
       setCompanies(prev => [newComp, ...prev]);
       setCurrentUser({
@@ -806,49 +807,50 @@ Zurich, Switzerland
 
     setSimulatedEmails(prev => [newEmail, ...prev]);
   };
+const verifyEmailToken = (token: string) => {
+  let verifiedEmail: string | undefined;
+  let foundRole: UserRole | undefined = undefined;
 
-  const verifyEmailToken = (token: string) => {
-    let verifiedEmail = "";
-    let foundRole: UserRole | undefined = undefined;
-
-    setCandidates(prev => {
-      const idx = prev.findIndex(c => c.verificationToken === token);
-      if (idx !== -1) {
-        verifiedEmail = prev[idx].email;
-        foundRole = "candidate";
-        const copy = [...prev];
-        copy[idx] = { ...copy[idx], emailVerified: true };
-        return copy;
-      }
-      return prev;
-    });
-
-    setCompanies(prev => {
-      const idx = prev.findIndex(c => c.verificationToken === token);
-      if (idx !== -1) {
-        verifiedEmail = prev[idx].email;
-        foundRole = "employer";
-        const copy = [...prev];
-        copy[idx] = { ...copy[idx], emailVerified: true };
-        return copy;
-      }
-      return prev;
-    });
-
-    if (foundRole) {
-      // Find and update current user if matches
-      setCurrentUser(prev => {
-        if (prev && prev.email.toLowerCase() === verifiedEmail.toLowerCase()) {
-          return { ...prev, emailVerified: true };
-        }
-        return prev;
-      });
-
-      return { success: true, role: foundRole };
+  setCandidates(prev => {
+    const idx = prev.findIndex(c => c.verificationToken === token);
+    if (idx !== -1) {
+      verifiedEmail = prev[idx].email;
+      foundRole = "candidate";
+      const copy = [...prev];
+      copy[idx] = { ...copy[idx], emailVerified: true };
+      return copy;
     }
+    return prev;
+  });
 
-    return { success: false, message: "Invalid or expired token sequence." };
-  };
+  setCompanies(prev => {
+    const idx = prev.findIndex(c => c.verificationToken === token);
+    if (idx !== -1) {
+      verifiedEmail = prev[idx].email;
+      foundRole = "employer";
+      const copy = [...prev];
+      copy[idx] = { ...copy[idx], emailVerified: true };
+      return copy;
+    }
+    return prev;
+  });
+
+  if (foundRole && verifiedEmail) {
+    setCurrentUser(prev => {
+      if (
+        prev?.email &&
+        prev.email.toLowerCase() === verifiedEmail!.toLowerCase()
+      ) {
+        return { ...prev, emailVerified: true };
+      }
+      return prev;
+    });
+
+    return { success: true, role: foundRole };
+  }
+
+  return { success: false, message: "Invalid or expired token sequence." };
+};
 
   const resendVerificationEmail = () => {
     if (!currentUser) return;
